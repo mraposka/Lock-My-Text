@@ -1,0 +1,45 @@
+Docker Kullanımı için Sebepler
+1. Taşınabilirlik ve Konsolide Çalışma Ortamı
+Docker, uygulamanızın çalışması için gereken ortamı (Node.js sürümü, bağımlılıklar, sistem yapılandırmaları vb.) kapsar. Bu sayede:
+
+AWS'deki sunucudan başka bir sunucuya veya bilgisayara taşırken hiçbir uyumluluk sorunu yaşamazsınız.
+Node.js projenizi diğer yazılımcılar veya ekip üyeleri kolayca çalıştırabilir.
+Senaryo:
+Projenizi geliştirirken kullandığınız Node.js sürümü (ör. 18.x) ve diğer bağımlılıklar AWS sunucunuzdaki sürümlerle uyumlu olmayabilir. Docker sayesinde her yerde aynı ortamı sağlayabilirsiniz.
+
+2. Kolay Yedekleme ve Ölçekleme
+Docker image'larınız yedeklenebilir ve AWS üzerindeki başka bir instance'a kolayca taşınabilir. Ayrıca:
+
+Uygulamanızı birkaç saniyede birden fazla container olarak başlatıp ölçeklendirebilirsiniz.
+Senaryo:
+Projeniz birden fazla kullanıcı tarafından kullanılmaya başlanırsa, AWS üzerinde yük dengeleyici ile birden fazla container çalıştırarak trafiği dağıtabilirsiniz.
+
+3. Geliştirme ve Üretim Ortamlarının Tutarlılığı
+Docker, geliştirme ve üretim ortamları arasında tutarlılık sağlar. Yani, bilgisayarınızda çalışan bir uygulama aynı şekilde AWS'de de çalışır.
+Bu, "yerel çalışıyor ama AWS'de çalışmıyor" gibi hataları ortadan kaldırır.
+
+Senaryo:
+Node.js sürümü, bağımlılık uyumluluğu ya da işletim sistemi farklılıklarından kaynaklanan hatalar yaşamazsınız.
+
+4. Mikro Hizmet Mimarisi ile Uyum
+Docker, mikro hizmet mimarisine geçiş yapmayı kolaylaştırır.
+Örneğin, bir şifreleme servisi ve bir başka veri analitiği servisi oluşturabilirsiniz. Her biri kendi bağımsız Docker container'ında çalışabilir.
+
+Senaryo:
+Şu anda sadece şifreleme yapıyorsunuz, ancak ileride ek servisler (ör. dosya transferi, raporlama) eklemek isterseniz, bu servisleri bağımsız Docker container'ları olarak çalıştırabilirsiniz.
+
+5. CI/CD Entegrasyonu
+Docker, sürekli entegrasyon/sürekli dağıtım (CI/CD) süreçlerine entegre edilebilir.
+Kodunuz değiştiğinde otomatik olarak yeni bir Docker image oluşturulabilir ve AWS üzerinde dağıtılabilir.
+
+Senaryo:
+Projeniz büyüdüğünde, her güncellemede manuel olarak AWS sunucusunu yapılandırmak yerine, Docker ile otomasyon sağlayabilirsiniz.
+
+6. Versiyonlama ve Image Yönetimi
+Docker image'larınızı versiyonlayarak farklı özellikleri test edebilirsiniz.
+Örneğin:
+
+node-app:1.0.0 (ilk versiyon)
+node-app:2.0.0 (şifreleme algoritmasını değiştiren versiyon)
+Senaryo:
+Yeni bir özellik eklerken mevcut uygulamanızı bozmadan yeni bir Docker image ile test yapabilirsiniz.
