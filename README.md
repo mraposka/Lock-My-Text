@@ -1,4 +1,4 @@
-# Lock My Text [Lock URL](http://3.142.225.66:3000/lock.html) - [Unlock URL](http://3.142.225.66:3000/unlock.html)
+# Lock My Text [Lock URL](http://3.142.225.66:3000/lock.html) - [Unlock URL](http://3.142.225.66:3000/unlock.html) - [Youtube](https://youtu.be/wCJCwz94p2Y)
 
 **Lock My Text**, dosyalarınızı AES-256-CTR algoritması ile şifreleyip şifrelerini çözebileceğiniz basit bir Node.js uygulamasıdır. Uygulama bir Docker konteyneri olarak çalıştırılabilir.
 
