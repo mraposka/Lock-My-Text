@@ -24,7 +24,7 @@
 
 1. **Projeyi Kopyalayın**:
    ```bash
-   git clone https://github.com/your-repository/lock-my-text.git
+   git clone https://github.com/mraposka/Lock-My-Text.git
    cd Lock-My-Text
    ```
 
