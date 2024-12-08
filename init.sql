@@ -1,0 +1,10 @@
+CREATE DATABASE IF NOT EXISTS file_upload;
+
+USE file_upload;
+
+CREATE TABLE IF NOT EXISTS uploads (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  file_name VARCHAR(255) NOT NULL,
+  upload_date DATETIME NOT NULL,
+  ip_address VARCHAR(45) NOT NULL
+);

@@ -1,27 +1,29 @@
 const express = require('express');
-const multer = require('multer'); // Multer'ı import et
+const multer = require('multer');
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
+const db = require('./db'); // MySQL bağlantısını içe aktar
 
 // Multer yapılandırması
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads'); // Dosyaların 'uploads' klasörüne kaydedilmesini sağlar
+    cb(null, 'uploads');
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // Dosya adını zaman damgası ile oluşturur
+    cb(null, Date.now() + path.extname(file.originalname));
   }
 });
 
-const upload = multer({ storage: storage }); // 'upload' nesnesi oluşturuluyor
+const upload = multer({ storage: storage });
 
 const app = express();
 const PORT = 3000;
 
 // Statik dosyalar (HTML ve CSS)
 app.use(express.static('public'));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Ana sayfa (home) rotası
 app.get('/', (req, res) => {
@@ -46,9 +48,25 @@ app.post('/lock', upload.single('file'), (req, res) => {
   input.pipe(cipher).pipe(output);
 
   output.on('finish', () => {
-    res.download(encryptedPath, `${file.originalname}.enc`, () => {
-      fs.unlinkSync(file.path); // Geçici dosyayı sil
-    });
+    // Veritabanına kaydet
+    const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    const uploadDate = new Date();
+
+    db.query(
+      'INSERT INTO uploads (file_name, upload_date, ip_address) VALUES (?, ?, ?)',
+      [file.originalname, uploadDate, ipAddress],
+      (err) => {
+        if (err) {
+          console.error('Veritabanı hatası:', err);
+          return res.status(500).send('Dosya başarıyla şifrelendi ancak veritabanına kaydedilemedi.');
+        }
+
+        // Dosyayı indirme işlemi
+        res.download(encryptedPath, `${file.originalname}.enc`, () => {
+          fs.unlinkSync(file.path); // Geçici dosyayı sil
+        });
+      }
+    );
   });
 });
 
@@ -78,5 +96,5 @@ app.post('/unlock', upload.single('file'), (req, res) => {
 
 // Sunucuyu başlat
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`Server running`);
 });
