@@ -1,4 +1,4 @@
-# Lock My Text [Lock URL](http://3.142.225.66/lock.html) - [Unlock URL](http://3.142.225.66/unlock.html)
+# Lock My Text [Lock URL](http://3.142.225.66:3000/lock.html) - [Unlock URL](http://3.142.225.66:3000/unlock.html)
 
 **Lock My Text**, dosyalarınızı AES-256-CTR algoritması ile şifreleyip şifrelerini çözebileceğiniz basit bir Node.js uygulamasıdır. Uygulama bir Docker konteyneri olarak çalıştırılabilir.
 
@@ -9,12 +9,14 @@
 - **Dosya Şifreleme**: Belirtilen bir şifre ile dosyaları şifreler ve `.enc` uzantılı bir dosya oluşturur.
 - **Şifre Çözme**: Şifrelenmiş dosyaları (`.enc`) çözerek orijinal dosyayı geri getirir.
 - **Web Arayüzü**: Şifreleme ve çözme işlemleri için basit bir HTML form arayüzü sağlar.
+- **Database**: Log kayıtları tutarak sorun yaratabilecek dosyaların tarihini ve yükleyen kişinin IP'sini yakalayarak yasal işlem başlatılabilir veya IP ban atılabilir.
 
 ---
 
 ## Gereksinimler
 
 - [Docker](https://www.docker.com/) yüklü olmalıdır.
+- [Docker-Compose](https://stackoverflow.com/questions/63708035/installing-docker-compose-on-amazon-ec2-linux-2-9kb-docker-compose-file) yüklü olmalıdır.
 
 ---
 
@@ -23,28 +25,18 @@
 1. **Projeyi Kopyalayın**:
    ```bash
    git clone https://github.com/your-repository/lock-my-text.git
-   cd lock-my-text
+   cd Lock-My-Text
    ```
 
 2. **Docker İmajını Oluşturun**:
    ```bash
-   sudo docker build -t lock-my-text .
+   docker-compose build
    ```
 
 3. **Gerekli Dizinleri Oluşturun**: Şifreleme ve çözme işlemleri için konteynerin bu dizinlere erişmesi gereklidir.
    ```bash
-   mkdir -p /path/to/host/uploads /path/to/host/encrypted /path/to/host/decrypted
+   docker-compose up -d
    ```
-
-4. **Docker Konteynerini Çalıştırın**:
-   ```bash
-   sudo docker run -d -p 80:3000 \
-   -v /path/to/host/uploads:/usr/src/app/uploads \
-   -v /path/to/host/encrypted:/usr/src/app/encrypted \
-   -v /path/to/host/decrypted:/usr/src/app/decrypted \
-   --name lock-my-text-container lock-my-text
-   ```
-
 ---
 
 ## Kullanım
@@ -52,8 +44,8 @@
 ### 1. Web Arayüzüne Erişim
 Konteyner çalıştıktan sonra, tarayıcınızdan şu adreslere erişebilirsiniz:
 
-- **Dosya Şifreleme**: [http://IPADDRESS/lock.html](http://IPADDRESS/lock.html)
-- **Şifre Çözme**: [http://IPADDRESS/unlock.html](http://IPADDRESS/unlock.html)
+- **Dosya Şifreleme**: [http://IPADDRESS:3000/lock.html](http://IPADDRESS/lock.html)
+- **Şifre Çözme**: [http://IPADDRESS:3000/unlock.html](http://IPADDRESS/unlock.html)
 
 ### 2. Şifreleme
 1. **http://IPADDRESS/lock.html** adresine gidin.
@@ -98,6 +90,8 @@ Konteyner adı zaten kullanılıyorsa mevcut konteyneri durdurup silin:
 docker stop lock-my-text-container
 docker rm lock-my-text-container
 ```
+
+### Hatırlatma: Sunucunuzun 3000 ve 3306 portlarını TCP protokolü için açık hale getirmeyi unutmayın. Tercihen compose dosyasından bu portları ve mysql kullanıcı bilgilerini değiştirebilirsiniz:
 
 ---
 
